@@ -23,6 +23,28 @@ request.onsuccess = function (event) {
     }
 };
 
+//function that runs when an error occurs
+request.onerror = function (event) {
+    //log error messages here
+    console.log(event.target.errorCode);
+
+};
+ 
+//This function will be executed if we attempt to submit a new transaction and there's no internt connection
+function saveRecord(record) {
+    
+    //open a new transaction with the database with reade and write permissions
+    const transaction = db.transaction.objectStore('new_budgetInput', 'readwrite');
+
+    //access the object store for `new_budgtInput`
+    const budgetObjectStore = transaction.objectStore('new_budgetInput');
+
+    //add record to the store with an add method
+    budgetObjectStore.add(record);
+}
+
+
+
 //function that creates the POST request to add withdralws or deposits to the budget-tracker app's database
 function uploadBudget() {
 
@@ -30,10 +52,10 @@ function uploadBudget() {
     const transaction = db.transaction(['new_budgetInput'], 'readwrite');
 
     //access the object store 'new_budetInput'
-    const budgetStore = transaction.objectStore('new_budgetInput')
+    const budgetObjectStore = transaction.objectStore('new_budgetInput');
 
     //get all records from the store and set these records to the const getAll
-    const getAll = budgetStore.getAll();
+    const getAll = budgetObjectStore.getAll();
 
     //upon a successful .getAll() execution, run this function
     getAll.onsuccess = function () {
@@ -56,10 +78,10 @@ function uploadBudget() {
                     const transaction = db.transaction(['new_budgetInput'], 'readwrite');
 
                     //Allows us to access the new_budgetInput object store
-                    const budgetStore = transaction.objectStore('new_budgetInput');
+                    const budgetObjectStore = transaction.objectStore('new_budgetInput');
 
                     //clear all intems in the store
-                    budgetStore.clear();
+                    budgetObjectStore.clear();
 
                     alert('All budget transactions have been submitted!');
                 })
@@ -70,3 +92,5 @@ function uploadBudget() {
     }
 }
 
+//Creates an Event Listener that will run the uploadeBudget function once the website is considered back online
+window.addEventListener('online', uploadBudget);

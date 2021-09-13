@@ -18,7 +18,7 @@
   Kyle Church
   
   ## Images
-  ![Alt text](./public/images/budget-tracker.JPG
+  ![Alt text](./public/images/budget-tracker.JPG)
   
   ## Link to Heroku: https://budget-tracker1994.herokuapp.com/
 
